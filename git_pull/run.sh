@@ -30,9 +30,9 @@ fi
 # init config repositorie
 if [ ! -d /config/.git ]; then
     echo "[Info] cleanup config folder and clone from repositorie"
-    rm -rf /config/.[!.]* /config/* 2&> /dev/null
+    rm -rf /config/.[!.]* /config/* > /dev/null 2>&1
 
-    if ! git clone "$REPOSITORY" /config 2&> /dev/null; then
+    if ! git clone "$REPOSITORY" /config > /dev/null 2>&1; then
         echo "[Error] can't clone $REPOSITORY into /config"
         exit 1
     fi
@@ -47,7 +47,7 @@ while true; do
     
     # perform pull
     echo "[Info] pull from $REPOSITORY"
-    git pull 2&> /dev/null || true
+    git pull > /dev/null 2>&1 || true
     
     # get actual (new) commit id
     NEW_COMMIT=$(git rev-parse HEAD)
@@ -64,7 +64,7 @@ while true; do
                 # Config is valid
                 if [ "$result" != "error" ]; then
                     echo "[Info] restart Home-Assistant"
-                    curl -s -X POST http://hassio/homeassistant/restart 2&> /dev/null || true
+                    curl -s -X POST http://hassio/homeassistant/restart > /dev/null 2>&1 || true
                 else
                     echo "[Error] invalid config!"
                 fi
